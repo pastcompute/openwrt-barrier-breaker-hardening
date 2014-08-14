@@ -74,6 +74,9 @@ endef
 
 define Host/Configure
 	$(GEN_CONFIG) > $(HOST_BUILD_DIR)/.config.new
+	@echo UCLIBC_HAS_SSP=y >> $(HOST_BUILD_DIR)/.config.new
+	@echo UCLIBC_BUILD_NOW=y >> $(HOST_BUILD_DIR)/.config.new
+	@echo 'UCLIBC_EXTA_CFLAGS="-D_FORTIFY_SOURCE=2"' >> $(HOST_BUILD_DIR)/.config.new
 	$(SED) 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(BUILD_DIR_TOOLCHAIN)/linux-dev/include\",g' \
 		-e 's,^.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=$(if $(CONFIG_SOFT_FLOAT),n,y),g' \
 		-e 's,^.*UCLIBC_HAS_SOFT_FLOAT.*,UCLIBC_HAS_SOFT_FLOAT=$(if $(CONFIG_SOFT_FLOAT),y,n),g' \
