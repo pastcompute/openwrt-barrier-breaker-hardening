@@ -99,6 +99,7 @@ define Build/Compile
 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
 		ARCH="$(ARCH)" \
 		CONFIG_PREFIX="$(PKG_INSTALL_DIR)" \
+		EXTRA_LDFLAGS="-z relro -z now -z noexecstack" \
 		LDLIBS="$(LDLIBS)" \
 		$(BB_MAKE_VERBOSE) \
 		install
