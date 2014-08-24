@@ -51,7 +51,7 @@ define Package/iptables
 $(call Package/iptables/Default)
   TITLE:=IP firewall administration tool
   MENU:=1
-  DEPENDS+= +kmod-ipt-core +libip4tc +IPV6:libip6tc +libxtables
+  DEPENDS+= +kmod-ipt-core +libip4tc +IPV6:libip6tc +libxtables +SSP_SUPPORT:libssp
 endef
 
 define Package/iptables/description
@@ -390,7 +390,7 @@ TARGET_CFLAGS += \
 TARGET_LDFLAGS += \
 	-Wl,--gc-sections
 
-CONFIGURE_ARGS += \
+CONFIGURE_ARGS += --with-pic \
 	--enable-shared \
 	--enable-devel \
 	--with-kernel="$(LINUX_DIR)/user_headers" \

@@ -28,6 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dnsmasq/Default
   SECTION:=net
   CATEGORY:=Base system
+	DEPENDS:=+SSP_SUPPORT:libssp
   TITLE:=DNS and DHCP server
   URL:=http://www.thekelleys.org.uk/dnsmasq/
 endef
@@ -76,7 +77,7 @@ Package/dnsmasq-dhcpv6/conffiles = $(Package/dnsmasq/conffiles)
 Package/dnsmasq-full/conffiles = $(Package/dnsmasq/conffiles)
 
 TARGET_CFLAGS += -ffunction-sections -fdata-sections
-TARGET_LDFLAGS += -Wl,--gc-sections
+TARGET_LDFLAGS += -Wl,--gc-sections -pie
 
 COPTS = $(if $(CONFIG_IPV6),,-DNO_IPV6)
 

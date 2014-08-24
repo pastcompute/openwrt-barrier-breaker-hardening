@@ -42,7 +42,7 @@ define Package/busybox
   MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
   TITLE:=Core utilities for embedded Linux
   URL:=http://busybox.net/
-  DEPENDS:=+BUSYBOX_USE_LIBRPC:librpc
+  DEPENDS:=+BUSYBOX_USE_LIBRPC:librpc +SSP_SUPPORT:libssp
   MENU:=1
 endef
 

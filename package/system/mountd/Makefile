@@ -19,7 +19,7 @@ define Package/mountd
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=OpenWrt automount daemon
-  DEPENDS:=@USB_SUPPORT +uci +kmod-usb-storage +kmod-fs-autofs4
+  DEPENDS:=@USB_SUPPORT +uci +kmod-usb-storage +kmod-fs-autofs4 +SSP_SUPPORT:libssp
   URL:=http://www.openwrt.org
 endef
 
@@ -30,6 +30,8 @@ endef
 define Package/mountd/conffiles
 /etc/config/mountd
 endef
+
+TARGET_LDFLAGS += -pie
 
 define Build/Compile
 	$(TARGET_CONFIGURE_OPTS) \

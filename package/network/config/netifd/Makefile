@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/netifd
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+libuci +libnl-tiny +libubus +ubus +ubusd +jshn +libubox
+  DEPENDS:=+libuci +libnl-tiny +libubus +ubus +ubusd +jshn +libubox +SSP_SUPPORT:libssp
   TITLE:=OpenWrt Network Interface Configuration Daemon
 endef
 
@@ -35,6 +35,8 @@ TARGET_CFLAGS += \
 CMAKE_OPTIONS += \
 	-DLIBNL_LIBS=-lnl-tiny \
 	-DDEBUG=1
+
+TARGET_LDFLAGS += -pie
 
 define Package/netifd/install
 	$(INSTALL_DIR) $(1)/sbin

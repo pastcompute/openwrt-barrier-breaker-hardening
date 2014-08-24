@@ -27,19 +27,19 @@ PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
-TARGET_LDFLAGS += $(if $(CONFIG_USE_EGLIBC),-lrt)
+TARGET_LDFLAGS += $(if $(CONFIG_USE_EGLIBC),-lrt) -pie
 
 define Package/procd
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+ubusd +ubus +libjson-script +ubox +USE_EGLIBC:librt +libubox +libubus +NAND_SUPPORT:procd-nand
+  DEPENDS:=+ubusd +ubus +libjson-script +ubox +USE_EGLIBC:librt +libubox +libubus +NAND_SUPPORT:procd-nand +SSP_SUPPORT:libssp
   TITLE:=OpenWrt system process manager
 endef
 
 define Package/procd-nand
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=@NAND_SUPPORT +ubi-utils
+  DEPENDS:=@NAND_SUPPORT +ubi-utils +SSP_SUPPORT:libssp
   TITLE:=OpenWrt sysupgrade nand helper
 endef
 

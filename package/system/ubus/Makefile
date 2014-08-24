@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/ubus
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+libubus +libblobmsg-json +ubusd
+  DEPENDS:=+libubus +libblobmsg-json +ubusd +SSP_SUPPORT:libssp
   TITLE:=OpenWrt RPC client utility
 endef
 
@@ -31,13 +31,13 @@ define Package/ubusd
   SECTION:=base
   CATEGORY:=Base system
   TITLE:=OpenWrt RPC daemon
-  DEPENDS:=+libubox
+  DEPENDS:=+libubox +SSP_SUPPORT:libssp
 endef
 
 define Package/libubus
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libubox
+  DEPENDS:=+libubox +SSP_SUPPORT:libssp
   ABI_VERSION:=$(PKG_VERSION)
   TITLE:=OpenWrt RPC client library
 endef
@@ -45,11 +45,13 @@ endef
 define Package/libubus-lua
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libubus +liblua
+  DEPENDS:=+libubus +liblua +SSP_SUPPORT:libssp
   TITLE:=Lua binding for the OpenWrt RPC client
 endef
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+
+TARGET_LDFLAGS += -pie
 
 CMAKE_OPTIONS = \
 	-DLUAPATH=/usr/lib/lua
