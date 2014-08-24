@@ -1,0 +1,20 @@
+Enable UCLIBC_EXTA_LDFLAGS configuration variable.
+This is used by Rules.mak but not enabled in Config.in so gets deleted during build.
+---
+
+--- a/extra/Configs/Config.in
++++ b/extra/Configs/Config.in
+@@ -2238,6 +2238,12 @@
+ 	help
+ 	  Add any additional CFLAGS to be used to build uClibc.
+ 
++config UCLIBC_EXTRA_LDFLAGS
++	string "Extra LDFLAGS"
++	default ""
++	help
++	  Add any additional LDFLAGS to be used to build uClibc.
++
+ config DODEBUG
+ 	bool "Enable debugging symbols"
+ 	select EXTRA_WARNINGS
+
