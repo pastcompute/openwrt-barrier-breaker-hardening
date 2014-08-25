@@ -132,6 +132,12 @@ ifeq ($(CONFIG_ARCH_64BIT),y)
   LIB_SUFFIX:=64
 endif
 
+# Additional hardening features
+ifeq ($(CONFIG_USE_NOEXECSTACK),y)
+  TARGET_CFLAGS+= -Wl,-z,noexecstack
+  TARGET_LDFLAGS+= -Wl,-z,noexecstack
+endif
+
 ifndef DUMP
   ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
     -include $(TOOLCHAIN_DIR)/info.mk
