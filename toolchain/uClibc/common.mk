@@ -51,6 +51,8 @@ CPU_CFLAGS = \
 	-Wno-unused-but-set-variable \
 	$(TARGET_CFLAGS) -ggdb
 
+NOEXECSTACK_FLAGS := -Wl,-z,noexecstack
+
 UCLIBC_MAKE = PATH='$(TOOLCHAIN_DIR)/initial/bin:$(TARGET_PATH)' $(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
 	$(TARGET_CONFIGURE_OPTS) \
 	DEVEL_PREFIX=/ \
@@ -79,6 +81,8 @@ define Host/Configure
 		-e 's,^.*UCLIBC_HAS_SOFT_FLOAT.*,UCLIBC_HAS_SOFT_FLOAT=$(if $(CONFIG_SOFT_FLOAT),y,n),g' \
 		-e 's,^.*UCLIBC_HAS_SHADOW.*,UCLIBC_HAS_SHADOW=$(if $(CONFIG_SHADOW_PASSWORDS),y,n),g' \
 		-e 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=$(if $(CONFIG_BUILD_NLS),y,n),g' \
+		-e 's,^PTHREADS_DEBUG_SUPPORT=y,PTHREADS_DEBUG_SUPPORT=$(if $(CONFIG_USE_NOEXECSTACK),n,y),g' \
+		-e 's~^UCLIBC_EXTRA_LDFLAGS=\"\(.*\)\"~UCLIBC_EXTRA_LDFLAGS=\"\1$(if $(CONFIG_USE_NOEXECSTACK),$(NOEXECSTACK_FLAGS),)\"~g' \
 		$(HOST_BUILD_DIR)/.config.new
 	cmp -s $(HOST_BUILD_DIR)/.config.new $(HOST_BUILD_DIR)/.config.last || { \
 		cp $(HOST_BUILD_DIR)/.config.new $(HOST_BUILD_DIR)/.config && \
