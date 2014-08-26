@@ -1,0 +1,48 @@
+From 45bd370f6bbc67cd23c135c6e0570a57a861d4c2 Mon Sep 17 00:00:00 2001
+From: Andrew McDonnell <bugs@andrewmcdonnell.net>
+Date: Tue, 26 Aug 2014 22:09:04 +0930
+Subject: [PATCH] When BUILD_NOEXECSTACK specified, ensure all generated .so
+ have it applied.
+
+Signed-off-by: Andrew McDonnell <bugs@andrewmcdonnell.net>
+---
+ Rules.mak                           | 6 ++++++
+ libpthread/linuxthreads/Makefile.in | 4 ++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/Rules.mak b/Rules.mak
+index 9c191f3..1d51d2c 100644
+--- a/Rules.mak
++++ b/Rules.mak
+@@ -733,6 +733,12 @@ else
+ DOMULTI:=n
+ endif
+ 
++ifeq ($(UCLIBC_BUILD_NOEXECSTACK),y)
++# Ensure that NX is applied to _all_ .so files generated
++# $(eval $(call check-ld-var,-z$(comma)noexecstack))    # <-- doesnt work: the part after -z gets stripped in check_ld
++LDFLAGS += -Wl,-z,noexecstack
++endif
++
+ ifneq ($(strip $(UCLIBC_EXTRA_LDFLAGS)),"")
+ LDFLAGS += $(call qstrip,$(UCLIBC_EXTRA_LDFLAGS))
+ endif
+diff --git a/libpthread/linuxthreads/Makefile.in b/libpthread/linuxthreads/Makefile.in
+index 697371b..a96f117 100644
+--- a/libpthread/linuxthreads/Makefile.in
++++ b/libpthread/linuxthreads/Makefile.in
+@@ -24,7 +24,11 @@ CFLAGS-libpthread/linuxthreads/sysdeps/pthread/         := $(CFLAGS-linuxthreads
+ 
+ ifeq ($(PTHREADS_DEBUG_SUPPORT),y)
+ LDFLAGS-libpthread.so := $(LDFLAGS_NOSTRIP) -Wl,-z,defs
++ifeq ($(UCLIBC_BUILD_NOEXECSTACK),y)
++LDFLAGS-libpthread.so += -Wl,-z,noexecstack
++endif
+ else
++# This will already have noexecstack if required
+ LDFLAGS-libpthread.so := $(LDFLAGS)
+ endif
+ 
+-- 
+1.9.1
+
