@@ -1,5 +1,7 @@
-Enable UCLIBC_EXTA_LDFLAGS configuration variable.
+Enable UCLIBC_EXTRA_LDFLAGS configuration variable.
 This is used by Rules.mak but not enabled in Config.in so gets deleted during build.
+
+Signed-off-by: Andrew McDonnell <bugs@andrewmcdonnell.net>
 ---
 
 --- a/extra/Configs/Config.in
