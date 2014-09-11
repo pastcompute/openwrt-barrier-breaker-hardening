@@ -111,13 +111,12 @@ BUILD_LOG_DIR:=$(TOPDIR)/logs
 PKG_INFO_DIR := $(STAGING_DIR)/pkginfo
 
 TARGET_PATH:=$(STAGING_DIR_HOST)/bin:$(subst $(space),:,$(filter-out .,$(filter-out ./,$(subst :,$(space),$(PATH)))))
-SECURE_CFLAGS:=-D_FORTIFY_SOURCE=2 -fstack-protector-all -fpic -fpie -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack --param=ssp-buffer-size=4
-TARGET_CFLAGS:= $(SECURE_CFLAGS) $(TARGET_OPTIMIZATION)$(if $(CONFIG_DEBUG), -g3) $(EXTRA_OPTIMIZATION)
+TARGET_CFLAGS:= $(TARGET_OPTIMIZATION)$(if $(CONFIG_DEBUG), -g3) $(EXTRA_OPTIMIZATION)
 TARGET_CXXFLAGS = $(TARGET_CFLAGS)
 TARGET_ASFLAGS_DEFAULT = $(TARGET_CFLAGS)
 TARGET_ASFLAGS = $(TARGET_ASFLAGS_DEFAULT)
 TARGET_CPPFLAGS:=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-TARGET_LDFLAGS:=-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib  -fPIC -fPIE -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+TARGET_LDFLAGS:=-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
 ifneq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
 LIBGCC_S_PATH=$(realpath $(wildcard $(call qstrip,$(CONFIG_LIBGCC_ROOT_DIR))/$(call qstrip,$(CONFIG_LIBGCC_FILE_SPEC))))
 LIBGCC_S=$(if $(LIBGCC_S_PATH),-L$(dir $(LIBGCC_S_PATH)) -lgcc_s)
@@ -135,8 +134,10 @@ endif
 
 # Additional hardening features
 ifeq ($(CONFIG_USE_NOEXECSTACK),y)
-  TARGET_CFLAGS+= -Wl,-z,noexecstack
-  TARGET_LDFLAGS+= -Wl,-z,noexecstack
+	#SECURE_CFLAGS:=-D_FORTIFY_SOURCE=2 -fstack-protector-all  --param=ssp-buffer-size=4
+	#   -fPIC -fPIE -fpic -fpie
+  TARGET_CFLAGS+= -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now
+  TARGET_LDFLAGS+= -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now
 endif
 
 ifndef DUMP

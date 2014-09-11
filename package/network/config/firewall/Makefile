@@ -44,7 +44,7 @@ define Build/Configure
 endef
 
 TARGET_CFLAGS += -ffunction-sections -fdata-sections
-TARGET_LDFLAGS += -Wl,--gc-sections -pie
+TARGET_LDFLAGS += -Wl,--gc-sections
 CMAKE_OPTIONS += $(if $(CONFIG_IPV6),,-DDISABLE_IPV6=1)
 
 define Package/firewall/install

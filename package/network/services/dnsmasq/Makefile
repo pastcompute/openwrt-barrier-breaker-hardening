@@ -28,7 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dnsmasq/Default
   SECTION:=net
   CATEGORY:=Base system
-	DEPENDS:=+SSP_SUPPORT:libssp
+  DEPENDS:=+SSP_SUPPORT:libssp
   TITLE:=DNS and DHCP server
   URL:=http://www.thekelleys.org.uk/dnsmasq/
 endef
