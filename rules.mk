@@ -139,7 +139,7 @@ ifeq ($(CONFIG_USE_NOEXECSTACK),y)
   TARGET_CFLAGS+= -Wl,-z,noexecstack
   TARGET_LDFLAGS+= -Wl,-z,noexecstack
 endif
-ifeq ($(CONFIG_USE_RELRO),y)
+ifeq ($(CONFIG_USE_RELRO_NOW),y)
 	#SECURE_CFLAGS:=-D_FORTIFY_SOURCE=2 -fstack-protector-all  --param=ssp-buffer-size=4
 	#   -fPIC -fPIE -fpic -fpie
   TARGET_CFLAGS+= -Wl,-z,relro -Wl,-z,now

@@ -1,0 +1,30 @@
+From adeb0ea2c0b01ad9b3415c2c69351928b678346a Mon Sep 17 00:00:00 2001
+From: Andrew McDonnell <bugs@andrewmcdonnell.net>
+Date: Sat, 13 Sep 2014 22:25:37 +0930
+Subject: [PATCH] Ensure relro,now worl on all files (instead of none bar
+ ld-uClibc.so)
+
+---
+ Rules.mak | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Rules.mak b/Rules.mak
+index 1d51d2c..afd2f20 100644
+--- a/Rules.mak
++++ b/Rules.mak
+@@ -684,10 +684,12 @@ $(eval $(call check-gcc-var,-ffunction-sections))
+ 
+ ifeq ($(UCLIBC_BUILD_RELRO),y)
+ LDFLAGS_NOSTRIP+=-Wl,-z,relro
++LDFLAGS+=-Wl,-z,relro
+ endif
+ 
+ ifeq ($(UCLIBC_BUILD_NOW),y)
+ LDFLAGS_NOSTRIP+=-Wl,-z,now
++LDFLAGS+=-Wl,-z,now
+ endif
+ 
+ ifeq ($(LDSO_GNU_HASH_SUPPORT),y)
+-- 
+1.9.1
+
