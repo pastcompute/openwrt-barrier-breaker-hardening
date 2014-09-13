@@ -51,7 +51,7 @@ endef
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
 
-TARGET_LDFLAGS += -pie
+# TARGET_LDFLAGS += -pie
 
 CMAKE_OPTIONS = \
 	-DLUAPATH=/usr/lib/lua

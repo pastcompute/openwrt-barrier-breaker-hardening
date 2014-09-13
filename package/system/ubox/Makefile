@@ -20,7 +20,7 @@ PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
-TARGET_LDFLAGS += $(if $(CONFIG_USE_EGLIBC),-lrt) -pie
+TARGET_LDFLAGS += $(if $(CONFIG_USE_EGLIBC),-lrt)
 
 define Package/ubox
   SECTION:=base

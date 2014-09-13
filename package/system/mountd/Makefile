@@ -31,7 +31,7 @@ define Package/mountd/conffiles
 /etc/config/mountd
 endef
 
-TARGET_LDFLAGS += -pie
+# TARGET_LDFLAGS += -pie
 
 define Build/Compile
 	$(TARGET_CONFIGURE_OPTS) \

@@ -39,7 +39,7 @@ define Package/rpcd/default
   DEPENDS:=+libubus +libubox +SSP_SUPPORT:libssp
 endef
 
-TARGET_LDFLAGS += -pie
+# TARGET_LDFLAGS += -pie
 
 define Package/rpcd
   $(Package/rpcd/default)
