@@ -36,7 +36,7 @@ CMAKE_OPTIONS += \
 	-DLIBNL_LIBS=-lnl-tiny \
 	-DDEBUG=1
 
-TARGET_LDFLAGS += -pie
+# TARGET_LDFLAGS += -pie
 
 define Package/netifd/install
 	$(INSTALL_DIR) $(1)/sbin
