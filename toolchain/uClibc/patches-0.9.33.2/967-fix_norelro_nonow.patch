@@ -1,30 +1,36 @@
-From adeb0ea2c0b01ad9b3415c2c69351928b678346a Mon Sep 17 00:00:00 2001
+From e36935354d1652e0f29a8c19c003335e1d4954c4 Mon Sep 17 00:00:00 2001
 From: Andrew McDonnell <bugs@andrewmcdonnell.net>
 Date: Sat, 13 Sep 2014 22:25:37 +0930
 Subject: [PATCH] Ensure relro,now worl on all files (instead of none bar
  ld-uClibc.so)
 
 ---
- Rules.mak | 2 ++
- 1 file changed, 2 insertions(+)
+ Rules.mak | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/Rules.mak b/Rules.mak
-index 1d51d2c..afd2f20 100644
+index 1d51d2c..b3357a6 100644
 --- a/Rules.mak
 +++ b/Rules.mak
-@@ -684,10 +684,12 @@ $(eval $(call check-gcc-var,-ffunction-sections))
- 
- ifeq ($(UCLIBC_BUILD_RELRO),y)
- LDFLAGS_NOSTRIP+=-Wl,-z,relro
-+LDFLAGS+=-Wl,-z,relro
+@@ -739,6 +739,18 @@ ifeq ($(UCLIBC_BUILD_NOEXECSTACK),y)
+ LDFLAGS += -Wl,-z,noexecstack
  endif
  
- ifeq ($(UCLIBC_BUILD_NOW),y)
- LDFLAGS_NOSTRIP+=-Wl,-z,now
-+LDFLAGS+=-Wl,-z,now
++ifeq ($(UCLIBC_BUILD_RELRO),y)
++# Ensure that NX is applied to _all_ .so files generated
++# $(eval $(call check-ld-var,-z$(comma)relro))    # <-- doesnt work: the part after -z gets stripped in check_ld
++LDFLAGS += -Wl,-z,relro
++endif
++
++ifeq ($(UCLIBC_BUILD_NOW),y)
++# Ensure that NX is applied to _all_ .so files generated
++# $(eval $(call check-ld-var,-z$(comma)now))    # <-- doesnt work: the part after -z gets stripped in check_ld
++LDFLAGS += -Wl,-z,now
++endif
++
+ ifneq ($(strip $(UCLIBC_EXTRA_LDFLAGS)),"")
+ LDFLAGS += $(call qstrip,$(UCLIBC_EXTRA_LDFLAGS))
  endif
- 
- ifeq ($(LDSO_GNU_HASH_SUPPORT),y)
 -- 
 1.9.1
 
