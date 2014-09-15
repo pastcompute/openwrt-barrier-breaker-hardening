@@ -30,6 +30,10 @@ else
   ifeq ($(PKG_VERSION),2.23.1)
     PKG_MD5SUM:=33adb18c3048d057ac58d07a3f1adb38
   endif
+  ifeq ($(PKG_VERSION),2.24.51)
+    PKG_SOURCE_URL:=ftp://sourceware.org/pub/binutils/snapshots/
+    PKG_MD5SUM:=f5e3cc4f3ae0c3146cff5d629fe1dd5e
+  endif
 endif
 
 HOST_BUILD_PARALLEL:=1
