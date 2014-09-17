@@ -11,6 +11,27 @@ REAL_STAGING_DIR_HOST:=$(STAGING_DIR_HOST)
 STAGING_DIR_HOST:=$(TOOLCHAIN_DIR)
 BUILD_DIR_HOST:=$(BUILD_DIR_TOOLCHAIN)
 
+# Note the importance of PATH_PREFIX here, especially for the case of things like uClibc
+# with a nested headers/ target.
+
+ifneq ($(if $(CONFIG_SRC_TREE_OVERRIDE),$(wildcard $(PATH_PREFIX)/git-src)),)
+  USE_GIT_TREE:=1
+  override QUILT:=
+  override HOST_UNPACK:=
+endif
+
+ifdef USE_GIT_TREE
+define Host/Prepare/Default
+	mkdir -p $(HOST_BUILD_DIR)
+	ln -s $(CURDIR)/$(PATH_PREFIX)/git-src $(HOST_BUILD_DIR)/.git
+	( cd $(HOST_BUILD_DIR); git checkout .)
+endef
+
+clean:
+	-rm $(HOST_BUILD_DIR)/.git
+
+endif
+
 include $(INCLUDE_DIR)/host-build.mk
 
 HOST_STAMP_PREPARED=$(HOST_BUILD_DIR)/.prepared
