@@ -38,6 +38,19 @@ menuconfig TARGET_OPTIONS
 
 		  Most people will answer N.
 
+	config SECURITY_USE_RELRO_EVERYWHERE
+		bool "Enable RELRO and NOW for binaries and libraries" if TARGET_OPTIONS
+		default n
+		help
+		  Apply -z relro -z now flag to the linker stage for all ELF binaries and libraries.
+		  This may improve security in some circumstances, provided this feature is
+		  supported in the kernel, at a small cost in runtime start performance.
+
+		  Note that some external packages may not support this option.
+		  Note that this may disable some debugger functionality.
+
+		  The default is currently N to avoid affecting existing systems, but it is hoped
+		  that at some point the default will be changed to Y.
 
 menuconfig EXTERNAL_TOOLCHAIN
 	bool

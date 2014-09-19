@@ -177,6 +177,10 @@ else
   endif
 endif
 
+ifeq ($(CONFIG_SECURITY_USE_RELRO_EVERYWHERE),y)
+  TARGET_LDFLAGS+= -Wl,-z,relro -Wl,-z,now
+endif
+
 export PATH:=$(TARGET_PATH)
 export STAGING_DIR
 export SH_FUNC:=. $(INCLUDE_DIR)/shell.sh;
