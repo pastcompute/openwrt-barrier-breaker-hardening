@@ -88,7 +88,7 @@ endif
 
 BUSYBOX_RELRO_LDFLAGS:=
 ifdef CONFIG_SECURITY_USE_RELRO_EVERYWHERE
-  BUSYBOX_RELRO_LDFLAGS=-Wl,-z,relro -Wl,-z,now
+  BUSYBOX_RELRO_LDFLAGS=-z relro -z now
 endif
 
 define Build/Compile
@@ -109,6 +109,7 @@ define Build/Compile
 		CC="$(TARGET_CC)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+		EXTRA_LDFLAGS="$(BUSYBOX_RELRO_LDFLAGS)" \
 		ARCH="$(ARCH)" \
 		CONFIG_PREFIX="$(PKG_INSTALL_DIR)" \
 		LDLIBS="$(LDLIBS)" \
