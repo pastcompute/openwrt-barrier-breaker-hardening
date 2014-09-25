@@ -52,6 +52,20 @@ menuconfig TARGET_OPTIONS
 		  The default is currently N to avoid affecting existing systems, but it is hoped
 		  that at some point the default will be changed to Y.
 
+	config SECURITY_USE_NOEXECSTACK_EVERYWHERE
+		bool "Enable noexecstack for binaries and libraries" if TARGET_OPTIONS
+		default n
+		help
+		  Force noexecstack marking on all ELF binaries and libraries (-Wl,-z,noexecstack)
+		  This may improve security in various circumstances, provided this feature is
+		  supported in the kernel.
+
+		  Note that some external packages may not support this option.
+		  Note that this will may disable some debugger functionality.
+
+		  The default is currently N to avoid affecting existing systems, but it is hoped
+		  that at some point the default will be changed to Y.
+
 menuconfig EXTERNAL_TOOLCHAIN
 	bool
 	prompt "Use external toolchain"  if DEVEL

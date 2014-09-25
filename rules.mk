@@ -181,6 +181,10 @@ ifeq ($(CONFIG_SECURITY_USE_RELRO_EVERYWHERE),y)
   TARGET_LDFLAGS+= -Wl,-z,relro -Wl,-z,now
 endif
 
+ifeq ($(CONFIG_SECURITY_USE_NOEXECSTACK_EVERYWHERE),y)
+  TARGET_LDFLAGS+= -Wl,-z,noexecstack
+endif
+
 export PATH:=$(TARGET_PATH)
 export STAGING_DIR
 export SH_FUNC:=. $(INCLUDE_DIR)/shell.sh;
