@@ -98,7 +98,7 @@ MAKE_FLAGS = \
 		CC="$(TARGET_CC)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		HOST_CPU="$(PKGARCH)" \
-		LDFLAGS="-Wl,--gc-sections" \
+		LDFLAGS="-Wl,--gc-sections $(TARGET_LDFLAGS)" \
 
 define Package/opkg/Default/install
 	$(INSTALL_DIR) $(1)/usr/lib/opkg
