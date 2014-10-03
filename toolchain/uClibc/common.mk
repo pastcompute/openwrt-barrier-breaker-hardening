@@ -50,7 +50,7 @@ CPU_CFLAGS = \
 	-funsigned-char -fno-builtin -fno-asm \
 	--std=gnu99 -ffunction-sections -fdata-sections \
 	-Wno-unused-but-set-variable \
-	$(TARGET_CFLAGS) -ggdb
+	$(TARGET_CFLAGS) -ggdb $(if $(CONFIG_SECURITY_USE_SSP_EVERYWHERE),-D_FORTIFY_SOURCE=2,)
 
 UCLIBC_MAKE = PATH='$(TOOLCHAIN_DIR)/initial/bin:$(TARGET_PATH)' $(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
 	$(TARGET_CONFIGURE_OPTS) \
@@ -78,8 +78,14 @@ endef
 # Note, pthread may still miss out if pthread debugging is enabled, so workaround that as well
 define Host/Configure
 	$(GEN_CONFIG) > $(HOST_BUILD_DIR)/.config.new
+	@echo UCLIBC_BUILD_NOW=$(if $(CONFIG_SECURITY_USE_RELRO_EVERYWHERE),y,n) >> $(HOST_BUILD_DIR)/.config.new
+	@echo UCLIBC_BUILD_SSP=$(if $(CONFIG_SECURITY_USE_SSP_EVERYWHERE),y,n) >> $(HOST_BUILD_DIR)/.config.new
+	@echo UCLIBC_BUILD_PIE=y >> $(HOST_BUILD_DIR)/.config.new
+	@echo PROPOLICE_BLOCK_SEGV=y >> $(HOST_BUILD_DIR)/.config.new
 	$(SED) 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(BUILD_DIR_TOOLCHAIN)/linux-dev/include\",g' \
+		-e 's,^PTHREADS_DEBUG_SUPPORT=y,PTHREADS_DEBUG_SUPPORT=$(if $(CONFIG_SECURITY_USE_NOEXECSTACK_EVERYWHERE),n,y),g' \
 		-e 's,^.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=$(if $(CONFIG_SOFT_FLOAT),n,y),g' \
+		-e 's,^.*UCLIBC_HAS_SSP.*,UCLIBC_HAS_SSP=$(if $(CONFIG_SECURITY_USE_SSP_EVERYWHERE),y,n),g' \
 		-e 's,^.*UCLIBC_HAS_SOFT_FLOAT.*,UCLIBC_HAS_SOFT_FLOAT=$(if $(CONFIG_SOFT_FLOAT),y,n),g' \
 		-e 's,^.*UCLIBC_HAS_SHADOW.*,UCLIBC_HAS_SHADOW=$(if $(CONFIG_SHADOW_PASSWORDS),y,n),g' \
 		-e 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=$(if $(CONFIG_BUILD_NLS),y,n),g' \
